@@ -3,7 +3,7 @@
  * @Date: 2021-12-31 11:09:30
  * @Description: Type: 0 模板，1 文字组件
  * @LastEditors: ShawnPhang
- * @LastEditTime: 2022-02-14 17:53:24
+ * @LastEditTime: 2022-02-16 14:08:54
  * @site: book.palxp.com / blog.palxp.com
  */
 // const func = require('../../utils/mysql.ts')
@@ -17,27 +17,26 @@ async function spiderTempFormal(apiType: string | number, params: any) {
   for (let i = 0; i < list.length; i++) {
     const collecter = apiType == 0 ? await getTemplate(list[i].id) : await getComponent(list[i].id)
     const { spider: spiderData } = require('../../configs.ts')
-    const params = {
-      image_url: list[i].cover,
-      content: JSON.stringify(collecter),
-      // scene_types: [8],
-      material_types: spiderData.material_types, 
-      source: 'bige',
-      source_id: list[i].id,
-      title: collecter.title,
-      tags: collecter.tags
-    }
-    http
-      .post(URL, params, {
-        headers: { Authorization: `Bearer eyJpdiI6InlnUU1TTGh2OFwvU0xzTjNhSEhiWDhnPT0iLCJ2YWx1ZSI6ImhNaXpkaTAyZFdvYXFOd0lBbjRWMWorS3J3UXBFUUtqcnFJdW9YbEJVdHhPSmZTOEdISUUycVoxTHZicmg0bjhkbzVWaDdDRFhmTGdJa1Y2ZXczQmRZSExDSzR1N2R0c0pMdXZydmNuRHRKTTN1ckh3QjB3aVQ5eTFLWFdTYWo4dytaQWhvbmdoZ1FOd2VPN2dwODcrZnBcLzR2SThIYURHR3c2dEVkMHZRXC9hT0lvSXhiTmNzRnVmMVRNY1dTc3FudjJORnFTemVqOUI2VHFxcW1EWjZnT0ppa1dtb0dkZlJXaTl3Mm5JeEtueld0aFJpOGRiXC9ockNBRWMrMXIrQXBvR05CQWcyT3hIY0EyVTQxbTdCVXhRPT0iLCJtYWMiOiJmOTdjZGE2NjMxMGM2MDdhMDE1YzQ5ZWJkZWM3NmQ4YjMyZjRjMzc1ZTFmMzJkYjIxNmU1M2M1YmNhMWY4NTY2In0=` },
-      })
-      .then((resp: any) => {
-        // resolve(resp.data)
+    if (!list[i].cover) {
+      continue
+    } else {
+      const params = {
+        image_url: list[i].cover,
+        content: JSON.stringify(collecter),
+        // scene_types: [8],
+        material_types: spiderData.material_types,
+        source: 'bige',
+        source_id: list[i].id,
+        title: collecter.title,
+        tags: collecter.tags,
+      }
+      try {
+        const resp = await http.post(URL, params, {
+          headers: { Authorization: `Bearer eyJpdiI6InlnUU1TTGh2OFwvU0xzTjNhSEhiWDhnPT0iLCJ2YWx1ZSI6ImhNaXpkaTAyZFdvYXFOd0lBbjRWMWorS3J3UXBFUUtqcnFJdW9YbEJVdHhPSmZTOEdISUUycVoxTHZicmg0bjhkbzVWaDdDRFhmTGdJa1Y2ZXczQmRZSExDSzR1N2R0c0pMdXZydmNuRHRKTTN1ckh3QjB3aVQ5eTFLWFdTYWo4dytaQWhvbmdoZ1FOd2VPN2dwODcrZnBcLzR2SThIYURHR3c2dEVkMHZRXC9hT0lvSXhiTmNzRnVmMVRNY1dTc3FudjJORnFTemVqOUI2VHFxcW1EWjZnT0ppa1dtb0dkZlJXaTl3Mm5JeEtueld0aFJpOGRiXC9ockNBRWMrMXIrQXBvR05CQWcyT3hIY0EyVTQxbTdCVXhRPT0iLCJtYWMiOiJmOTdjZGE2NjMxMGM2MDdhMDE1YzQ5ZWJkZWM3NmQ4YjMyZjRjMzc1ZTFmMzJkYjIxNmU1M2M1YmNhMWY4NTY2In0=` },
+        })
         console.log(resp.data)
-      })
-      .catch((e: any) => {
-        console.log(e)
-      })
+      } catch (e) {}
+    }
   }
 }
 async function spiderTempGaodingFormal(setType: string | number = 0, num: number = 0) {
@@ -83,7 +82,6 @@ module.exports = {
     // console.log('采集结束，新增组件 30 个')
     res.json({ code: 200, msg: '运行结束' + new Date() })
   },
-
 
   proxyGet(req: any, res: any) {
     let url = req.query.url

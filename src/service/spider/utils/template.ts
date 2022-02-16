@@ -3,7 +3,7 @@
  * @Date: 2022-01-04 09:17:49
  * @Description: 爬取模板/组件
  * @LastEditors: ShawnPhang
- * @LastEditTime: 2022-02-15 14:35:41
+ * @LastEditTime: 2022-02-15 16:53:42
  * @site: book.palxp.com / blog.palxp.com
  */
 const downUpdateImage = require('./downUpdateImage.ts')
@@ -193,7 +193,6 @@ module.exports = {
           }
           const defaultData = JSON.parse(JSON.stringify(pageDefault))
           result.page = Object.assign(defaultData, { backgroundColor, backgroundImage, backgroundTransform, width, height })
-
           result.title = title
           result.tags = tags
         } catch (e) {

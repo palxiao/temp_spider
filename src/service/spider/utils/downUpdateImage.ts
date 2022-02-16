@@ -3,7 +3,7 @@
  * @Date: 2022-01-05 10:48:38
  * @Description: 七牛入库
  * @LastEditors: ShawnPhang
- * @LastEditTime: 2022-02-15 14:38:12
+ * @LastEditTime: 2022-02-16 14:15:36
  * @site: book.palxp.com / blog.palxp.com
  */
 module.exports = function downUpdateImage(imgUrl: string, headers: Headers, prefix: string = 'cache') {
@@ -14,10 +14,13 @@ module.exports = function downUpdateImage(imgUrl: string, headers: Headers, pref
       resolve({ url: '' })
       return
     }
-    const resp = await axios.get(imgUrl, {
-      headers,
-      responseType: 'arraybuffer',
-    })
+    let resp = ''
+    try {
+      resp = await axios.get(imgUrl, {
+        headers,
+        responseType: 'arraybuffer',
+      })
+    } catch (e) {}
     let result: any = {}
     let imgName = imgUrl.split('?')[0].split('/').pop()
     ;(imgName?.split('.') || []).length <= 1 && (imgName += '.png')
